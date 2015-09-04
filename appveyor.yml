@@ -16,11 +16,11 @@ before_build:
  # until git for win 2.5 release with commit checkout
  - git submodule update --init ffmpeg asmjit minidx9
  - 7z x wxWidgets.7z -aos -oC:\rpcs3\wxWidgets > null
- - 7z x llvmlibs.7z -aos -oC:\rpcs3 > null
- - cmake -G "Visual Studio 14 Win64" -DLLVM_DIR=C:/rpcs3/llvm_build/share/llvm/cmake
+ - if %configuration%==Release (cmake -G "Visual Studio 14 Win64")
+   else (7z x llvmlibs.7z -aos -oC:\rpcs3 > null && cmake -G "Visual Studio 14 Win64" -DLLVM_DIR=C:/rpcs3/llvm_build/share/llvm/cmake)
 
 build_script:
- - cmake --build . --config "Release - LLVM DX12" -- /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+ - cmake --build . --config "Release - DX12" -- /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
 install:
  - ps: Start-FileDownload 'https://402331b94f8e4b87ae2ef4677347f7956cf3861f.googledrive.com/host/0B6v_qtb9hkicfmt0NG0wTTRtUmF4X3VTQk5Oc2JidEVKVnUteDA1dXdrYlNsVW9kREpsSHc/wxWidgets.7z'
